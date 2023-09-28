@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:internee_pk/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key});
@@ -13,10 +14,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text('Internee.pk'),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,18 +119,27 @@ class _LoginScreenState extends State<LoginScreen> {
                             contentPadding:
                                 const EdgeInsets.symmetric(horizontal: 0.0),
                           ),
-                          Container(
-                            height: 50,
-                            width: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.green),
-                            child: const Center(
-                                child: Text(
-                              'Sign In',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            )),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HomeScreen()));
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.green),
+                              child: const Center(
+                                  child: Text(
+                                'Sign In',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              )),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
