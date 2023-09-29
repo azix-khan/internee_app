@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:internee_pk/screens/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -60,10 +61,18 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         ),
-        actions: const [
-          Icon(Icons.person),
-          Icon(Icons.keyboard_arrow_down),
-          SizedBox(
+        actions: [
+          const Icon(Icons.person),
+          InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
+                dispose();
+              },
+              child: const Icon(Icons.keyboard_arrow_down)),
+          const SizedBox(
             width: 10,
           )
         ],
@@ -74,93 +83,95 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Home',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Divider(),
-            const SizedBox(
-              height: 10,
-            ),
-            const Card(
-              color: Colors.white,
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Welcome from Internee.pk, Aziz Ur Rahman!'),
+      body: const Padding(
+        padding: EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Home',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Divider(),
-            const SizedBox(
-              height: 10,
-            ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Card(
+              SizedBox(
+                height: 10,
+              ),
+              Divider(),
+              SizedBox(
+                height: 10,
+              ),
+              Card(
                 color: Colors.white,
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Your running tasks',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text('Welcome from Internee.pk,\nAziz Ur Rahman!'),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Divider(),
+              SizedBox(
+                height: 10,
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Card(
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Your running tasks',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
-                    const Divider(),
-                    const Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '#',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'Task id',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'Actions',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                      Divider(),
+                      Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '#',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              'Task id',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              'Actions',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Divider(),
-                    TaskWidget(numText: '1', taskText: 'TSK-000-25'),
-                    const Divider(),
-                    TaskWidget(numText: '2', taskText: 'TSK-000-45'),
-                    const Divider(),
-                    TaskWidget(numText: '3', taskText: 'TSK-000-43'),
-                    const Divider(),
-                    TaskWidget(numText: '4', taskText: 'TSK-000-46'),
-                    const Divider(),
-                    TaskWidget(numText: '5', taskText: 'TSK-000-47'),
-                  ],
+                      Divider(),
+                      TaskWidget(numText: '1', taskText: 'TSK-000-25'),
+                      Divider(),
+                      TaskWidget(numText: '2', taskText: 'TSK-000-45'),
+                      Divider(),
+                      TaskWidget(numText: '3', taskText: 'TSK-000-43'),
+                      Divider(),
+                      TaskWidget(numText: '4', taskText: 'TSK-000-46'),
+                      Divider(),
+                      TaskWidget(numText: '5', taskText: 'TSK-000-47'),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -169,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class TaskWidget extends StatelessWidget {
   final String numText, taskText;
-  TaskWidget({Key? key, required this.numText, required this.taskText})
+  const TaskWidget({Key? key, required this.numText, required this.taskText})
       : super(key: key);
 
   @override
@@ -185,10 +196,18 @@ class TaskWidget extends StatelessWidget {
             ],
           ),
           Text(taskText),
-          const Text(
-            'View',
-            style:
-                TextStyle(backgroundColor: Colors.green, color: Colors.white),
+          Container(
+            height: 20,
+            width: 40,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                color: Colors.green),
+            child: const Center(
+              child: Text(
+                'View',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ),
         ],
       ),
