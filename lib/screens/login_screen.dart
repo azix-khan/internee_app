@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:internee_pk/forgot_screen.dart';
 import 'package:internee_pk/screens/home_screen.dart';
+import 'package:internee_pk/screens/round_button.dart';
+import 'package:internee_pk/toast_message_utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key});
@@ -10,6 +14,46 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool? check = false;
+  bool loading = false;
+  final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  final _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
+  void login() {
+    setState(() {
+      loading = true;
+    });
+    _auth
+        .signInWithEmailAndPassword(
+      email: emailController.text,
+      password: passwordController.text.toString(),
+    )
+        .then((value) {
+      Utils().toastMessage(value.user!.email.toString());
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      setState(() {
+        loading = false;
+      });
+    }).onError((error, stackTrace) {
+      debugPrint(error.toString());
+      Utils().toastMessage(error.toString());
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 5,
                         blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
@@ -70,89 +113,113 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                                hintText: 'Email',
-                                suffixIcon: Icon(Icons.email),
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                )),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                                hintText: 'Password',
-                                suffixIcon: Icon(Icons.visibility_off),
-                                border: OutlineInputBorder(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
+                              controller: emailController,
+                              decoration: const InputDecoration(
+                                  hintText: 'Email',
+                                  suffixIcon: Icon(Icons.email),
+                                  border: OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)))),
-                          ),
-                          CheckboxListTile(
-                            value: check,
-                            activeColor: Colors.blue,
-                            checkColor: Colors.white,
-                            controlAffinity: ListTileControlAffinity.leading,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                check = value;
-                              });
-                            },
-                            title: const Text(
-                              "Remember Me",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                                        BorderRadius.all(Radius.circular(10)),
+                                  )),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Email Required';
+                                }
+                                // String pattern =
+                                //     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                // RegExp regex = RegExp(pattern);
+                                // if (!(regex.hasMatch(value))) {
+                                //   return 'Invalid Email';
+                                // }
+                                return null;
+                              },
                             ),
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 0.0),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomeScreen()));
-                            },
-                            child: Container(
-                              height: 50,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.green),
-                              child: const Center(
-                                  child: Text(
-                                'Sign In',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              )),
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const Center(
-                              child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold),
-                          )),
-                        ],
+                            TextFormField(
+                              controller: passwordController,
+                              decoration: const InputDecoration(
+                                  hintText: 'Password',
+                                  suffixIcon: Icon(Icons.visibility_off),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10)))),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Password Required';
+                                }
+                                // String pattern =
+                                //     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                // RegExp regex = RegExp(pattern);
+                                // if (!(regex.hasMatch(value))) {
+                                //   return 'Invalid Email';
+                                // }
+                                return null;
+                              },
+                            ),
+                            CheckboxListTile(
+                              value: check,
+                              activeColor: Colors.blue,
+                              checkColor: Colors.white,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  check = value;
+                                });
+                              },
+                              title: const Text(
+                                "Remember Me",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 0.0),
+                            ),
+                            RoundButton(
+                              loading: loading,
+                              title: 'Login',
+                              onTap: () {
+                                if (_formKey.currentState!.validate()) {
+                                  login();
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const ForgotPasswordScreen()),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                )),
+                          ],
+                        ),
                       ),
                     ),
                   ),

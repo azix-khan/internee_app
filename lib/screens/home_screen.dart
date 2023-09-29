@@ -11,29 +11,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            const DrawerHeader(
-              child: Stack(
-                children: [
-                  Positioned(
-                    bottom: 8.0,
-                    left: 4.0,
-                    child: Text(
-                      "App Making.co",
-                      style: TextStyle(color: Colors.grey, fontSize: 20),
-                    ),
-                  )
-                ],
+      drawer: SafeArea(
+        child: Drawer(
+          width: 200,
+          backgroundColor: Colors.blueGrey[900],
+          child: ListView(
+            children: [
+              const DrawerHeader(
+                child: Stack(
+                  children: [
+                    Positioned(
+                      bottom: 50.0,
+                      left: 30.4,
+                      child: Text(
+                        "Internee.Pk",
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text("Dashboard"),
-              onTap: () {},
-            ),
-          ],
+              ListTile(
+                leading: const Icon(
+                  Icons.speed,
+                  color: Colors.white,
+                ),
+                title: const Text(
+                  "Dashboard",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onTap: () {},
+              ),
+            ],
+          ),
         ),
       ),
       appBar: AppBar(
@@ -47,6 +60,13 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         ),
+        actions: const [
+          Icon(Icons.person),
+          Icon(Icons.keyboard_arrow_down),
+          SizedBox(
+            width: 10,
+          )
+        ],
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
         title: const Text(
@@ -73,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 10,
             ),
             const Card(
-              color: Colors.white, // Change the color to white
+              color: Colors.white,
               child: Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Align(
