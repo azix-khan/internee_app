@@ -4,6 +4,9 @@ A new Flutter project.
 
 ## Getting Started
 
+![Activity - Azix Khan](https://github.com/azix-khan/internee_app/assets/138978130/42f40279-264a-462b-ba46-bb78278bb722)
+
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
